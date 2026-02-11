@@ -1,7 +1,8 @@
+
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:d_plan/core/theme/app_colors.dart';
-import 'package:d_plan/models/note_model.dart';
-import 'package:d_plan/services/firestore_service.dart';
+import 'package:d_plan/screens/notes/note_edit_screen.dart';
 
 class NotesScreen extends StatefulWidget {
   const NotesScreen({super.key});
@@ -11,187 +12,110 @@ class NotesScreen extends StatefulWidget {
 }
 
 class _NotesScreenState extends State<NotesScreen> {
-  final FirestoreService _firestoreService = FirestoreService();
-  final TextEditingController _searchController = TextEditingController();
-  String _searchQuery = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _searchController.addListener(() {
-      setState(() {
-        _searchQuery = _searchController.text.toLowerCase();
-      });
-    });
-  }
+  final List<Map<String, String>> _notes = [
+    {
+      'title': 'Meeting Minutes',
+      'content': 'Review the quarterly goals and project milestones with the team. Key objectives for Q3: Finalize the mobile interface redesign, Improve server server response times, Expand the beta testing group. We discussed the importance of maintaining an ultra-minimalist aesthetic throughout the application to ensure user focus remains on the content itself.',
+    },
+    {
+      'title': 'Project Ideas',
+      'content': 'Exploring new features for the mobile app...',
+    },
+    {
+      'title': 'Grocery List',
+      'content': 'Milk, organic eggs, sourdough bread,...',
+    },
+    {
+      'title': 'Workout Plan',
+      'content': 'Morning routine: 20 minutes cardio, 30...',
+    },
+    {
+      'title': 'Travel Itinerary',
+      'content': 'Flight leaves at 10 AM. Book the airport...',
+    },
+     {
+      'title': 'Reading List',
+      'content': 'The Design of Everyday Things, Atomic...',
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            StreamBuilder<List<Note>>(
-              stream: _firestoreService.getNotes(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return const Center(child: Text('Something went wrong'));
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                final notes = snapshot.data ?? [];
-                final filteredNotes = notes.where((note) {
-                  return note.title.toLowerCase().contains(_searchQuery) ||
-                      note.content.toLowerCase().contains(_searchQuery);
-                }).toList();
-
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Notes',
-                            style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: AppColors.textDark),
-                          ),
-                          CircleAvatar(
-                            backgroundColor: Colors.grey[200],
-                            child: const Icon(Icons.person, color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          hintText: 'Search your notes',
-                          prefixIcon: const Icon(Icons.search, color: AppColors.textGrey),
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: filteredNotes.length,
-                        itemBuilder: (context, index) {
-                          final note = filteredNotes[index];
-                          return _buildListItem(Icons.description, note.title, note.content, '2h ago');
-                        },
-                      ),
-                      const SizedBox(height: 100), // Bottom padding
-                    ],
-                  ),
-                );
-              },
-            ),
-            Positioned(
-              bottom: 24,
-              right: 16,
-              child: FloatingActionButton(
-                onPressed: () => _showAddNoteDialog(context),
-                backgroundColor: AppColors.primaryPurple,
-                child: const Icon(Icons.add, color: Colors.white, size: 32),
-              ),
-            ),
-          ],
+      backgroundColor: AppColors.backgroundWhite,
+      appBar: AppBar(
+        toolbarHeight: 80,
+        backgroundColor: AppColors.backgroundWhite,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.textDark),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-      ),
-    );
-  }
-
-  Widget _buildListItem(IconData icon, String title, String desc, String time) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.01), blurRadius: 4),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              color: AppColors.backgroundLight,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(icon, color: AppColors.textDark),
+        title: const Text(
+          'Notes',
+          style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: AppColors.textDark),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(LucideIcons.search, size: 24, color: AppColors.textDark),
+            onPressed: () {
+              // TODO: Implement search functionality
+            },
+          ),
+          IconButton(
+            icon: const Icon(LucideIcons.plus, size: 28, color: AppColors.textDark),
+            onPressed: () {
+               Navigator.push(context, MaterialPageRoute(builder: (context) => const NoteEditScreen()));
+            },
           ),
           const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                const SizedBox(height: 4),
-                Text(desc, style: const TextStyle(color: AppColors.textGrey, fontSize: 14), maxLines: 1, overflow: TextOverflow.ellipsis),
-              ],
-            ),
-          ),
-          Text(time, style: const TextStyle(color: AppColors.textGrey, fontSize: 12)),
         ],
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        itemCount: _notes.length,
+        itemBuilder: (context, index) {
+          final note = _notes[index];
+          return _buildNoteCard(context, note['title']!, note['content']!);
+        },
       ),
     );
   }
 
-  void _showAddNoteDialog(BuildContext context) {
-    final _titleController = TextEditingController();
-    final _contentController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Add Note'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
+  Widget _buildNoteCard(BuildContext context, String title, String content) {
+    return Card(
+      elevation: 0,
+      margin: const EdgeInsets.only(bottom: 16.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: AppColors.borderGrey.withOpacity(0.5), width: 1),
+      ),
+      color: AppColors.surfaceWhite,
+      child: InkWell(
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => NoteEditScreen(initialTitle: title, initialContent: content)));
+        },
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextField(
-                controller: _titleController,
-                decoration: const InputDecoration(labelText: 'Title'),
+              Text(
+                title,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textDark),
               ),
-              TextField(
-                controller: _contentController,
-                decoration: const InputDecoration(labelText: 'Content'),
+              const SizedBox(height: 8),
+              Text(
+                content,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 16, color: AppColors.textGrey),
               ),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                _firestoreService.addNote(
-                  _titleController.text,
-                  _contentController.text,
-                );
-                Navigator.pop(context);
-              },
-              child: const Text('Add'),
-            ),
-          ],
-        );
-      },
+        ),
+      ),
     );
   }
 }

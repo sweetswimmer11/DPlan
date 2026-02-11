@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primaryBlue = Color(0xFF2B8CEE);
+  // Primary Colors
+  static const Color primaryBlue = Color(0xFF3B82F6);
   static const Color primaryPurple = Color(0xFF8B5CF6);
-  static const Color accentPurple = Color(0xFFA78BFA);
+
+  // System Colors
+  static const Color successGreen = Color(0xFF10B981);
+  static const Color errorRed = Color(0xFFEF4444);
   
+  // Text Colors
   static const Color textDark = Color(0xFF111418);
-  static const Color textGrey = Color(0xFF617589);
-  static const Color textLightGrey = Color(0xFF94A3B8);
+  static const Color textGrey = Color(0xFF6B7280);
+  static const Color textLightGrey = Color(0xFF9CA3AF);
+
   
-  static const Color backgroundLight = Color(0xFFF8F9FA);
+  // Background & Surface Colors
   static const Color backgroundWhite = Color(0xFFFFFFFF);
+  static const Color backgroundLight = Color(0xFFF9FAFB); 
   static const Color surfaceWhite = Color(0xFFFFFFFF);
-  
-  static const Color successGreen = Color(0xFF078838);
-  static const Color warningOrange = Color(0xFFF97316);
-  static const Color bgOrangeLight = Color(0xFFFFEDD5);
+
+  // Border Colors
+  static const Color borderGrey = Color(0xFFD1D5DB);
+
+  // Accent Colors
+  static const Color accentPurple = Color(0xFF8B5CF6);
 }
