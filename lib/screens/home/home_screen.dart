@@ -6,6 +6,7 @@ import 'package:d_plan/screens/tasks/tasks_screen.dart';
 import 'package:d_plan/screens/notes/notes_screen.dart';
 import 'package:d_plan/screens/lists/lists_screen.dart';
 import 'package:d_plan/screens/focus/focus_screen.dart';
+import 'package:d_plan/screens/life_lists/life_lists_screen.dart';
 import 'package:d_plan/screens/profile/settings_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -66,7 +67,7 @@ class HomeScreen extends StatelessWidget {
               title: 'Life Lists',
               icon: LucideIcons.layers,
               onTap: () {
-                // TODO: Implement Life Lists screen or connect to existing screen
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const LifeListsScreen()));
               },
             ),
           ],

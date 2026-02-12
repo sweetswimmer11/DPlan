@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:d_plan/core/theme/app_colors.dart';
-import 'package:d_plan/screens/main_wrapper.dart';
+import 'package:d_plan/screens/home/home_screen.dart';
 import 'package:d_plan/screens/auth/login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -80,7 +80,7 @@ class RegisterScreen extends StatelessWidget {
             onPressed: () {
                Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => const MainWrapper()),
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
               );
             },
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.primaryBlue, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
